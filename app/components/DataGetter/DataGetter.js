@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from 'react';
+
 import { DataContext } from './context';
+import { getItems } from '../../api';
 
 const DataGetter = ({ children }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  
+  const [value, setValue] = useState({ data: [], isLoading: true });
+
   useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(true);
-    }, Math.random() * 2000)
-  }, [])
-  
-  return (
-    <DataContext.Provider value={isLoading}>
-      {children}
-    </DataContext.Provider>
-  )
+    console.log(performance.now());
+    getItems().then(data => setValue({ data, isLoading: false }));
+  }, []);
+
+  return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 };
 
 export default DataGetter;

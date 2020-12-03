@@ -1,46 +1,61 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 
-const Wrapper = styled.div`
-  background: aquamarine;
-  margin-bottom: 24px;
-  display: flex;
-  flex-wrap: wrap;
-`;
+import Loader from 'components/Loader';
+import { Wrapper } from './Wrapper';
 
 const Item = styled.div`
-  height: 100px;
-  min-width: 100px;
-  background: black;
-  flex: 1;
-  
+  height: 50px;
+  flex: 1 1 50px;
+  background: #ef9a9a;
+
   &:nth-child(2n) {
-    background: red;
+    background: #f44336;
   }
-  
+
   &:nth-child(3n) {
-    background: blue;
+    background: #9575cd;
   }
-  
+
   &:nth-child(5n) {
-    background: yellow;
+    background: #ee6969;
   }
-  
-  &:nth-child(5n) {
-    background: green;
+
+  &:nth-child(7n) {
+    background: #eea6ba;
   }
 `;
 
-const items = [...Array(100).keys()]
+const items = [...Array(300).keys()];
 
-const Widget = () => {
+function sleep(milliseconds) {
+  const date = Date.now();
+  let currentDate = null;
+  do {
+    currentDate = Date.now();
+  } while (currentDate - date < milliseconds);
+}
+
+const Widget = ({ isLoading }) => {
+  const data = useMemo(() => {
+    if (!isLoading) {
+      sleep(100);
+    }
+
+    return [];
+  }, [isLoading]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
   return (
     <Wrapper>
       {items.map(i => (
-        <Item key={i} />
+        <Item key={i} data={data} />
       ))}
     </Wrapper>
-  )
+  );
 };
 
 export default Widget;
